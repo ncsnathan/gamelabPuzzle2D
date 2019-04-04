@@ -25,6 +25,7 @@ public class respawn : MonoBehaviour
     private void Respawn()
     {
         GameObject gameBlock = Resources.Load("Blue") as GameObject;
-        Instantiate(gameBlock);
+        Instantiate(gameBlock,transform,false);
+        
     }
 }
