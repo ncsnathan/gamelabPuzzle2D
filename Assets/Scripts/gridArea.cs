@@ -9,11 +9,12 @@ public class gridArea : MonoBehaviour
     float gridWidth, gridHeight;
     float gameBlockWidth, gameBlockHeight;
     Vector3 gridAreaPos;
+    float cont;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        cont = 0;
         Transform transformGridArea = transform.Find("GridArea");
         SpriteRenderer spriteRendererGrid = transformGridArea.gameObject.GetComponent<SpriteRenderer>();
         gridHeight = spriteRendererGrid.bounds.size.y;
@@ -25,6 +26,7 @@ public class gridArea : MonoBehaviour
         gridAreaPos = transformGridArea.position;
         gridAreaPos.z = 0;
 
+        /* TESTE
         for (int i = 0; i < numColumn; i++)
         {
             for(int j = 0; j < numRow; j++)
@@ -35,12 +37,36 @@ public class gridArea : MonoBehaviour
                 gameBlock.transform.SetParent(transform, false);
 
             }
-        }
+        }*/
     }
+
+    public Vector3 GetGridPosition(int x, int y)
+    {
+        float posX = (gameBlockWidth * x) - 1.74f;
+        float posY = (gameBlockHeight * y) - 2.27f;
+        return new Vector3(posX,posY,0) + gridAreaPos;
+
+    }
+
+    private void Respawn()
+    {
+        int randomPos = Random.Range(0, 4);
+        GameObject gameBlock = Resources.Load("Blue") as GameObject;
+        gameBlock.transform.position = GetGridPosition(randomPos, 8);
+        Instantiate(gameBlock, transform, false);
+
+
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        cont += Time.deltaTime;
+        if (cont >= 2)
+        {
+            Respawn();
+            cont = 0f;
+        }
     }
 }
