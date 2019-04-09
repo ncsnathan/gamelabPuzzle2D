@@ -10,10 +10,13 @@ public class gridArea : MonoBehaviour
     float gameBlockWidth, gameBlockHeight;
     Vector3 gridAreaPos;
     float cont;
+    public gridArea GameBox;
 
     // Start is called before the first frame update
     void Start()
     {
+        GameBox = GetComponentInParent<gridArea>().GameBox;
+
         cont = 0;
         Transform transformGridArea = transform.Find("GridArea");
         SpriteRenderer spriteRendererGrid = transformGridArea.gameObject.GetComponent<SpriteRenderer>();
@@ -54,8 +57,6 @@ public class gridArea : MonoBehaviour
         GameObject gameBlock = Resources.Load("Blue") as GameObject;
         gameBlock.transform.position = GetGridPosition(randomPos, 8);
         Instantiate(gameBlock, transform, false);
-
-
     }
 
 
