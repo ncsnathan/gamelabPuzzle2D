@@ -12,6 +12,8 @@ public class gridArea : MonoBehaviour
     float cont;
     public gridArea GameBox;
 
+    public int randomPosition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,18 +31,6 @@ public class gridArea : MonoBehaviour
         gridAreaPos = transformGridArea.position;
         gridAreaPos.z = 0;
 
-        /* TESTE
-        for (int i = 0; i < numColumn; i++)
-        {
-            for(int j = 0; j < numRow; j++)
-            {
-                GameObject gameBlockPrefab = Resources.Load("Blue") as GameObject;
-                GameObject gameBlock = Instantiate(gameBlockPrefab);
-                gameBlock.transform.position = new Vector3((gameBlockWidth * i)-1.74f, (gameBlockHeight * j)-2.27f, 0f) + gridAreaPos;
-                gameBlock.transform.SetParent(transform, false);
-
-            }
-        }*/
     }
 
     public Vector3 GetGridPosition(int x, int y)
@@ -54,6 +44,7 @@ public class gridArea : MonoBehaviour
     private void Respawn()
     {
         int randomPos = Random.Range(0, 4);
+        randomPosition = randomPos;
         GameObject gameBlock = Resources.Load("Blue") as GameObject;
         gameBlock.transform.position = GetGridPosition(randomPos, 8);
         Instantiate(gameBlock, transform, false);

@@ -7,19 +7,21 @@ public class Blocks : MonoBehaviour
     float cont = 0;
     float timeToTarget = 4f;
 
-    gridArea GameBox;   
+    gridArea GameBox;
+    int posX;
     
     // Start is called before the first frame update
     void Start()
     {
         GameBox = GameObject.Find("Game Box HD").GetComponent<gridArea>();
-        transform.position = Vector3.Lerp(GameBox.GetGridPosition(0, 8), GameBox.GetGridPosition(0, 0), 0);
+        posX = GameObject.Find("Game Box HD").GetComponent<gridArea>().randomPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         cont += Time.deltaTime / timeToTarget;
-        transform.position = Vector3.Lerp(GameBox.GetGridPosition(0, 8), GameBox.GetGridPosition(0, 0), cont);
+        transform.position = Vector3.Lerp(GameBox.GetGridPosition(posX,8), GameBox.GetGridPosition(posX, 0), cont);
     }
 }
