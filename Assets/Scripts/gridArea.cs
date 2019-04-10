@@ -11,6 +11,7 @@ public class gridArea : MonoBehaviour
     Vector3 gridAreaPos;
     float cont;
     public gridArea GameBox;
+    public GameObject[,] gameBlockGrid;
 
     public int randomPosition;
 
@@ -18,6 +19,7 @@ public class gridArea : MonoBehaviour
     void Start()
     {
         GameBox = GetComponentInParent<gridArea>().GameBox;
+        gameBlockGrid = new GameObject[numRow, numColumn];
 
         cont = 0;
         Transform transformGridArea = transform.Find("GridArea");
