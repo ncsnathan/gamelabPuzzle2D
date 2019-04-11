@@ -20,6 +20,7 @@ public class Blocks : MonoBehaviour
         startPosY = 8;
         endPosY = 8;
         isMoving = false;
+        GameBox.addBlock(this, posX, endPosY);
         
     }
 
@@ -28,6 +29,8 @@ public class Blocks : MonoBehaviour
     {
         if (isMoving == true)
         {
+            GameBox.updateGrid(this,posX,endPosY);
+
             cont += Time.deltaTime / timeToTarget;
             transform.position = Vector3.Lerp(GameBox.GetGridPosition(posX, startPosY), GameBox.GetGridPosition(posX, endPosY), cont);
             if(cont >= 1f)
@@ -38,7 +41,8 @@ public class Blocks : MonoBehaviour
             }
         }
         else
-        {   if (endPosY > 0)
+        { 
+            if (endPosY > 0 && GameBox.verificaAbaixo(posX,endPosY))
             {
                 endPosY--;
                 isMoving = true;
