@@ -74,6 +74,67 @@ public class gridArea : MonoBehaviour
         Instantiate(gameBlock, transform, false);
     }
 
+    public void Swap(RotationButton.buttonType type)
+    {   
+        
+        if(type == RotationButton.buttonType.Left)
+        {
+            SwapColumn(0, 1);            
+        }
+
+        if(type == RotationButton.buttonType.Mid)
+        {
+            SwapColumn(1, 2);
+        }
+
+        if (type == RotationButton.buttonType.Right)
+        {
+            SwapColumn(2, 3);
+        }
+        
+    }
+
+    public void SwapColumn(int indexA, int indexB)
+    {
+        Blocks[] aux1 = new Blocks[numRow];
+        Blocks[] aux2 = new Blocks[numRow];
+
+        for(int i =0; i<numRow; i++)
+        {
+            if(gameBlockGrid[indexA,i] != null)
+            {
+                aux1[i] = gameBlockGrid[indexA, i];
+                gameBlockGrid[indexA, i] = null;
+            }
+
+            if (gameBlockGrid[indexB, i] != null)
+            {
+                aux2[i] = gameBlockGrid[indexB, i];
+                gameBlockGrid[indexB, i] = null;
+            }
+
+            gameBlockGrid[indexA, i] = aux2[i];
+            gameBlockGrid[indexB, i] = aux1[i];
+
+        }
+
+        for(int i = 0; i <numRow; i++)
+        {
+            if(aux1[i] != null)
+            {
+                aux1[i].ToSwap(indexB - indexA);
+            }
+
+            if(aux2[i] != null)
+            {
+                aux2[i].ToSwap((indexA - indexB));
+            }
+        }
+
+    }
+
+
+
 
     // Update is called once per frame
     void Update()
