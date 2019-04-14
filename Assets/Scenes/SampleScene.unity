@@ -975,6 +975,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameBox: {fileID: 1584095256}
+  gameBlocksPrefab:
+  - {fileID: 5824047175340506334, guid: 99d34bc8535837343870eb6900a953ef, type: 3}
+  - {fileID: 3218165827847354434, guid: 3688aa98c29aed24e96581ca84795087, type: 3}
+  - {fileID: 3218165827847354434, guid: 56c448ed98b667748b0b07112d18eacf, type: 3}
+  - {fileID: 3218165827847354434, guid: d792576c9253c4748a50192140ff7ed6, type: 3}
+  - {fileID: 3218165827847354434, guid: 0729538dfd2f6c445b57b7554249321e, type: 3}
+  - {fileID: 3218165827847354434, guid: e42dc95b6e40b0244ad643846a52c9f6, type: 3}
   randomPosition: 0
 --- !u!1 &1646611569
 GameObject:

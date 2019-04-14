@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class Blocks : MonoBehaviour
 {
+    public enum gameBlockType
+    {
+        Blue,
+        Red,
+        Yellow,
+        Green,
+        TopEgg,
+        BottonEgg
+    }
+
     float cont = 0, swapCont = 0;
     float timeToTarget = 0.5f, timeToSwap = 0.5f;
 
@@ -11,7 +21,26 @@ public class Blocks : MonoBehaviour
     int posX, startPosY, endPosY, swapInt;
 
     bool isMoving, isSwaping;
-    
+    private bool isFixed;
+
+    public gameBlockType type;
+
+    public bool IsFixed
+    {
+        get { return isFixed; }
+    }
+
+    public int PosY
+    {
+        get { return endPosY; }
+    }
+
+    public int PosX
+    {
+        get { return posX; }
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,23 +50,24 @@ public class Blocks : MonoBehaviour
         endPosY = 8;
         isMoving = false;
         isSwaping = false;
+        isFixed = false;
         GameBox.addBlock(this, posX, endPosY);
         
     }
 
     // Update is called once per frame
     void Update()
-    {
-        if (isSwaping)
-        {
-            swapCont += Time.deltaTime / timeToSwap;
-            transform.position = Vector3.Lerp(transform.position, GameBox.GetGridPosition(posX, endPosY), swapCont);
-            if(swapCont >= 1f)
-            {
-                isSwaping = false;
-            }
+    {      
+           if (isSwaping)
+           {
+                swapCont += Time.deltaTime / timeToSwap;
+                transform.position = Vector3.Lerp(transform.position, GameBox.GetGridPosition(posX, endPosY), swapCont);
+                if (swapCont >= 1f)
+                {
+                    isSwaping = false;
+                }
 
-        }
+           }
 
         if (isMoving == true)
         {
@@ -61,6 +91,11 @@ public class Blocks : MonoBehaviour
                 endPosY--;
                 isMoving = true;
             }
+            else
+            {
+                isFixed = true;
+                GameBox.checkCollision(this);
+            }
         }
 
     }
@@ -68,7 +103,6 @@ public class Blocks : MonoBehaviour
     public void ToSwap(int diferenca)
     {
         posX = posX + diferenca;
-        Debug.Log(diferenca);
         swapCont = 0f;
         timeToSwap = 0.5f;
         isSwaping = true;

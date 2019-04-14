@@ -13,11 +13,14 @@ public class gridArea : MonoBehaviour
     public gridArea GameBox;
     public Blocks[,] gameBlockGrid;
 
+    public List<GameObject> gameBlocksPrefab;
+
     public int randomPosition;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         GameBox = GetComponentInParent<gridArea>().GameBox;
         gameBlockGrid = new Blocks[numColumn, numRow];
 
@@ -34,6 +37,32 @@ public class gridArea : MonoBehaviour
         gridAreaPos.z = 0;
 
     }
+
+    public bool checkCollision(Blocks gameblock)
+    {
+        bool collision = false;
+
+        if(gameblock.PosY == 0)
+        {
+            collision = false;
+        }
+        else
+        {
+            collision = gameBlockGrid[gameblock.PosX, gameblock.PosY - 1] != null &&
+                gameBlockGrid[gameblock.PosX, gameblock.PosY - 1].type == gameblock.type;
+        }
+
+        if (collision)
+        {
+            Destroy(gameblock.gameObject);
+            Destroy(gameBlockGrid[gameblock.PosX, gameblock.PosY - 1].gameObject);
+            gameBlockGrid[gameblock.PosX, gameblock.PosY] = null;
+            gameBlockGrid[gameblock.PosX, gameblock.PosY - 1] = null;
+        }
+
+        return collision;
+    }
+
     public bool verificaAbaixo(int posX, int posY)
     {
         if(gameBlockGrid[posX,posY-1] == null)
@@ -67,11 +96,32 @@ public class gridArea : MonoBehaviour
 
     private void Respawn()
     {
+        int randomGameBlock = Random.Range(0, gameBlocksPrefab.Count);
         int randomPos = Random.Range(0, 4);
+        GameObject gameBlock = Instantiate(gameBlocksPrefab[randomGameBlock]);
         randomPosition = randomPos;
-        GameObject gameBlock = Resources.Load("Blue") as GameObject;
         gameBlock.transform.position = GetGridPosition(randomPos, 8);
-        Instantiate(gameBlock, transform, false);
+    }
+
+    private bool canSwap(Blocks blockA, Blocks blockB)
+    { 
+        if(blockA != null && blockB == null)
+        {
+            return blockA.IsFixed;
+        }
+        if (blockA == null & blockB != null)
+        {
+            return blockB.IsFixed;
+        }
+        if(blockA == null && blockB == null)
+        {
+            return false;
+        }
+        if(blockA != null && blockB != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void Swap(RotationButton.buttonType type)
@@ -99,36 +149,47 @@ public class gridArea : MonoBehaviour
         Blocks[] aux1 = new Blocks[numRow];
         Blocks[] aux2 = new Blocks[numRow];
 
-        for(int i =0; i<numRow; i++)
+        for (int i = 0; i < numRow; i++)
         {
-            if(gameBlockGrid[indexA,i] != null)
+
+            if (canSwap(gameBlockGrid[indexA, i], gameBlockGrid[indexB, i]))
             {
-                aux1[i] = gameBlockGrid[indexA, i];
-                gameBlockGrid[indexA, i] = null;
+
+                if (gameBlockGrid[indexA, i] != null)
+                {
+                    aux1[i] = gameBlockGrid[indexA, i];
+                    gameBlockGrid[indexA, i] = null;
+                }
+
+                if (gameBlockGrid[indexB, i] != null)
+                {
+                    aux2[i] = gameBlockGrid[indexB, i];
+                    gameBlockGrid[indexB, i] = null;
+                }
+
+                gameBlockGrid[indexA, i] = aux2[i];
+                gameBlockGrid[indexB, i] = aux1[i];
+
             }
-
-            if (gameBlockGrid[indexB, i] != null)
-            {
-                aux2[i] = gameBlockGrid[indexB, i];
-                gameBlockGrid[indexB, i] = null;
-            }
-
-            gameBlockGrid[indexA, i] = aux2[i];
-            gameBlockGrid[indexB, i] = aux1[i];
-
         }
 
         for(int i = 0; i <numRow; i++)
         {
-            if(aux1[i] != null)
+
+            if (canSwap(gameBlockGrid[indexA, i], gameBlockGrid[indexB, i]))
             {
-                aux1[i].ToSwap(indexB - indexA);
+                if (aux1[i] != null)
+                {
+                    aux1[i].ToSwap(indexB - indexA);
+                }
+
+                if (aux2[i] != null)
+                {
+                    aux2[i].ToSwap((indexA - indexB));
+                }
+
             }
 
-            if(aux2[i] != null)
-            {
-                aux2[i].ToSwap((indexA - indexB));
-            }
         }
 
     }
